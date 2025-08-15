@@ -12,10 +12,10 @@ car_data = load_data()
 
 st.sidebar.header('Opções de gráficos')
 
-all_manufacturers = sorted(car_data['manufacturer'].unique())
+all_manufacturers = sorted(car_data['make'].unique())
 manufacturer_selection = st.sidebar.selectbox('Selecione o fabricante', all_manufacturers)
 
-filtered_data = car_data[car_data['manufacturer'] == manufacturer_selection]
+filtered_data = car_data[car_data['make'] == manufacturer_selection]
 
 st.sidebar.markdown('---')
 st.sidebar.header('Selecione os gráficos')
