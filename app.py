@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 
-st.header('Dashboard de anúncios de carros')
+st.header('Anúncios de carros')
 
 @st.cache_data
 def load_data():
@@ -10,7 +10,7 @@ def load_data():
 
 car_data = load_data()
 
-st.sidebar.header('Opções de gráficos')
+st.sidebar.header('Busque do seu Jeito')
 
 filter_options = {
     'Modelo': 'model',
@@ -20,7 +20,7 @@ filter_options = {
 }
 
 filter_type_selection = st.sidebar.selectbox(
-    'Selecione o tipo de filtro',
+    'Selecione o filtro',
     list(filter_options.keys())
 )
 
@@ -35,6 +35,7 @@ price_range_selection = st.sidebar.slider(
     min_value=min_price,
     max_value=max_price,
     value=(min_price, max_price)
+    format='$%d'
 )
 
 filtered_data = car_data[
@@ -46,13 +47,13 @@ filtered_data = car_data[
 st.sidebar.markdown('---')
 st.sidebar.header('Selecione os gráficos')
 
-hist_checkbox = st.sidebar.checkbox('Criar histograma de quilometragem')
-scatter_checkbox = st.sidebar.checkbox('Criar gráfico de dispersão de preço x quilometragem')
-bar_chart_checkbox = st.sidebar.checkbox('Criar gráfico de barras de preço por condição')
+hist_checkbox = st.sidebar.checkbox('Quilometragem')
+scatter_checkbox = st.sidebar.checkbox('Gráfico de dispersão de preço x quilometragem')
+bar_chart_checkbox = st.sidebar.checkbox('Gráfico de barras de preço por condição')
 
 if hist_checkbox:
     st.subheader(f'Distribuição de Quilometragem para {value_selection}')
-    st.write(f'Criando um histograma para a coluna de quilometragem para {value_selection}...')
+    st.write(f'Histograma para quilometragem para {value_selection}...')
     
     fig_hist = px.histogram(filtered_data, x="odometer")
     
