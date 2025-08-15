@@ -6,29 +6,34 @@ import plotly.express as px
 st.header('Dashboard de anúncios de carros')
 
 # Carregar os dados
-car_data = pd.read_csv('vehicles.csv')
+# O Streamlit recomenda o uso de st.cache para carregar dados pesados apenas uma vez.
+@st.cache_data
+def load_data():
+    return pd.read_csv('vehicles.csv')
 
-# Criar a caixa de seleção
-hist_button = st.button('Criar histograma de quilometragem')
+car_data = load_data()
 
-# Lógica para o botão
-if hist_button:
-    # Escrever uma mensagem de sucesso
-    st.write('Criando um histograma para a coluna de quilometragem')
+# Adicionar a barra lateral para opções de gráficos
+st.sidebar.header('Opções de gráficos')
+
+# Criar as caixas de seleção na barra lateral
+hist_checkbox = st.sidebar.checkbox('Criar histograma de quilometragem')
+scatter_checkbox = st.sidebar.checkbox('Criar gráfico de dispersão de preço x quilometragem')
+
+# Lógica para as caixas de seleção
+if hist_checkbox:
+    st.subheader('Distribuição de Quilometragem')
+    st.write('Criando um histograma para a coluna de quilometragem...')
     
     # Criar o histograma
-    fig = px.histogram(car_data, x="odometer")
+    fig_hist = px.histogram(car_data, x="odometer")
     
     # Exibir o gráfico Plotly
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig_hist, use_container_width=True)
 
-# Adicionar uma caixa de seleção
-scatter_button = st.button('Criar gráfico de dispersão de preço x quilometragem')
-
-# Lógica para o segundo botão
-if scatter_button:
-    # Escrever uma mensagem de sucesso
-    st.write('Criando um gráfico de dispersão entre preço e quilometragem')
+if scatter_checkbox:
+    st.subheader('Preço vs. Quilometragem')
+    st.write('Criando um gráfico de dispersão entre preço e quilometragem...')
     
     # Criar o gráfico de dispersão
     fig_scatter = px.scatter(car_data, x="odometer", y="price")
