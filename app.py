@@ -10,7 +10,7 @@ def load_data():
 
 car_data = load_data()
 
-st.sidebar.header('Busque do seu Jeito')
+st.sidebar.header('Configure sua Busca')
 
 filter_options = {
     'Modelo': 'model',
@@ -34,7 +34,7 @@ price_range_selection = st.sidebar.slider(
     'Selecione o intervalo de preço',
     min_value=min_price,
     max_value=max_price,
-    value=(min_price, max_price)
+    value=(min_price, max_price),
     format='$%d'
 )
 
