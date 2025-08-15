@@ -12,33 +12,41 @@ car_data = load_data()
 
 st.sidebar.header('Opções de gráficos')
 
+all_manufacturers = sorted(car_data['manufacturer'].unique())
+manufacturer_selection = st.sidebar.selectbox('Selecione o fabricante', all_manufacturers)
+
+filtered_data = car_data[car_data['manufacturer'] == manufacturer_selection]
+
+st.sidebar.markdown('---')
+st.sidebar.header('Selecione os gráficos')
+
 hist_checkbox = st.sidebar.checkbox('Criar histograma de quilometragem')
 scatter_checkbox = st.sidebar.checkbox('Criar gráfico de dispersão de preço x quilometragem')
 bar_chart_checkbox = st.sidebar.checkbox('Criar gráfico de barras de preço por condição')
 
 if hist_checkbox:
-    st.subheader('Distribuição de Quilometragem')
+    st.subheader(f'Distribuição de Quilometragem para {manufacturer_selection}')
     st.write('Criando um histograma para a coluna de quilometragem...')
-        
-    fig_hist = px.histogram(car_data, x="odometer")
-        
+    
+    fig_hist = px.histogram(filtered_data, x="odometer")
+    
     st.plotly_chart(fig_hist, use_container_width=True)
 
 if scatter_checkbox:
-    st.subheader('Preço vs. Quilometragem')
+    st.subheader(f'Preço vs. Quilometragem para {manufacturer_selection}')
     st.write('Criando um gráfico de dispersão entre preço e quilometragem...')
     
-    fig_scatter = px.scatter(car_data, x="odometer", y="price")
-        
+    fig_scatter = px.scatter(filtered_data, x="odometer", y="price")
+    
     st.plotly_chart(fig_scatter, use_container_width=True)
 
 if bar_chart_checkbox:
-    st.subheader('Preço médio por Condição do Veículo')
+    st.subheader(f'Preço médio por Condição do Veículo para {manufacturer_selection}')
     st.write('Criando um gráfico de barras de preço por condição...')
-        
-    avg_price_by_condition = car_data.groupby('condition')['price'].mean().reset_index()
-        
+    
+    avg_price_by_condition = filtered_data.groupby('condition')['price'].mean().reset_index()
+    
     fig_bar = px.bar(avg_price_by_condition, x='condition', y='price', 
-                     title='Preço Médio por Condição do Veículo')
-        
+                     title=f'Preço Médio por Condição do Veículo ({manufacturer_selection})')
+    
     st.plotly_chart(fig_bar, use_container_width=True)
